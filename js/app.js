@@ -7,7 +7,7 @@ var Enemy = function(x,y) {
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
-    this.speedX = 50
+    this.speed = 50
 };
 
 
@@ -17,7 +17,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-      this.x += this.speedX * dt
+      this.x += this.speed * dt
 };
 
 // Draw the enemy on the screen, required method for game
@@ -31,13 +31,12 @@ var Player = function (x,y){
 this.sprite = 'images/char-princess-girl.png'
 this.x = x;
 this.y = y;
-this.speedX = 0
-this.speedY = 0
 };
 
 // This class requires an update(), render() and
 Player.prototype.update = function(dt) {
-//this.y -= this.speedY * dt
+this.x * dt;
+this.y * dt;
 
 };
 Player.prototype.render = function() {
@@ -45,10 +44,16 @@ ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 // a handleInput() method.
 Player.prototype.handleInput = function(allowedKeys) {
-//37 = player.speedX -= 1;
-//38 = player.speedY -= 1
-//39 = player.speedX += 1
-//40 = player.speedY += 1
+ //37 = this.x -= 1;
+//38 = this.y -= 1
+//39 = this.x += 1
+//40 = this.y += 1
+    if (player.key == 37) {this.x -= 100; }
+    if (player.key == 38) {this.y -= 100; }
+    if (player.key == 39) {this.x += 100; }
+    if (player.key == 40) {this.y += 100; }
+
+
 };
 
 // Now instantiate your objects.
@@ -64,6 +69,7 @@ var player = new Player(200,330);
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
+  player.key = e.keyCode;
     var allowedKeys = {
         37: 'left',
         38: 'up',
@@ -73,6 +79,7 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
 
 
 //Help sought from:
