@@ -1,11 +1,13 @@
 // Enemies our player must avoid
-var Enemy = function() {
+var Enemy = function(x,y) {
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    
+    this.x = x;
+    this.y = y;
+    this.speedX = 50
 };
 
 
@@ -15,6 +17,7 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+      this.x += this.speedX * dt
 };
 
 // Draw the enemy on the screen, required method for game
@@ -24,29 +27,39 @@ Enemy.prototype.render = function() {
 
 
 // Now write your own player class
-var Player = function (){
+var Player = function (x,y){
 this.sprite = 'images/char-princess-girl.png'
+this.x = x;
+this.y = y;
+this.speedX = 0
+this.speedY = 0
 };
 
 // This class requires an update(), render() and
 Player.prototype.update = function(dt) {
+//this.y -= this.speedY * dt
 
 };
 Player.prototype.render = function() {
 ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 // a handleInput() method.
-
+Player.prototype.handleInput = function(allowedKeys) {
+//37 = player.speedX -= 1;
+//38 = player.speedY -= 1
+//39 = player.speedX += 1
+//40 = player.speedY += 1
+};
 
 // Now instantiate your objects.
-var enemy1 = new Enemy( 10,150);
-var enemy2 = new Enemy( 10, 250);
-var enemy3 = new Enemy( 10, 350);
+var enemy1 = new Enemy( 0,60);
+var enemy2 = new Enemy( 0, 140);
+var enemy3 = new Enemy( 0, 230);
 
 // Place all enemy objects in an array called allEnemies
 const allEnemies = [ enemy1, enemy2, enemy3 ]
 // Place the player object in a variable called player
-var player = new Player(175,150);
+var player = new Player(200,330);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -60,3 +73,7 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+
+//Help sought from:
+//https://www.w3schools.com/graphics/game_controllers.asp
