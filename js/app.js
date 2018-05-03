@@ -9,8 +9,8 @@ var Enemy = function(x,y,speed) {
     this.y = y;
     this.speed = speed;
     //height and width parameter needed to check collisions
-    this.width = 100
-    this.height = 170
+    this.width = 80
+    this.height = 60
 };
 
 
@@ -37,8 +37,8 @@ this.sprite = 'images/char-princess-girl.png'
 this.x = x;
 this.y = y;
 //height and width parameter needed to check collisions
-this.width = 100
-this.height = 170
+this.width = 50
+this.height = 80
 };
 
 // This class requires an update(), render() and
@@ -54,14 +54,15 @@ ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 
 //Code similar to as seen at https://www.w3schools.com/graphics/game_controllers.asp
 Player.prototype.handleInput = function(allowedKeys) {
-    if (player.key == 37) {this.x -= 100; }
-    if (player.key == 38) {this.y -= 100; }
-    if (player.key == 39) {this.x += 100; }
-    if (player.key == 40) {this.y += 100; }
+    if (player.key == 37) {this.x -= 90; }
+    if (player.key == 38) {this.y -= 90; }
+    if (player.key == 39) {this.x += 90; }
+    if (player.key == 40) {this.y += 90; }
 
     //do not allow player to reach the water
-    //resetPlayer function(){}
+    if (this.y < 50) {this.y - 50; player.reset(200,330)}
     //do not allow player to fall off game board
+    if (this.x < 0 ||this.x > 469 ) {this.y - 50; player.reset(200,330)}
 };
 
 // Now instantiate your objects.
@@ -88,19 +89,19 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
+//logic taken from explanation at https://stackoverflow.com/questions/23302698/java-check-if-two-rectangles-overlap-at-any-point
+// also explanation of collisions here: https://discussions.udacity.com/t/a-study-in-javascript-frogger-arcade-game-clone/38871/15
 function checkCollisions (allEnemies, player) { // capitalize the the first letter of Collisions
     for(var i = 0; i < allEnemies.length; i++) {
         if (allEnemies[i].x < player.x + player.width &&
-	    allEnemies[i].x + allEnemies[i].width > player.x &&
-	    allEnemies[i].y < player.y + player.height &&
-	    allEnemies[i].height + allEnemies[i].y > player.y) {
-	    player.reset(200,330); // call the reset method on the player object and not on the Player constructor, pass x and y coordinates to the reset method
+            allEnemies[i].y < player.y + player.height &&
+	          player.x < allEnemies[i].x + allEnemies[i].width &&
+	          player.y < allEnemies[i].height + allEnemies[i].y) {
+          //reset player to original x and y coordinates
+	         player.reset(200,330);
     	}
-    } // put the closing curly brace here
+    }
 }
-
-
-
 
 Player.prototype.reset = function (x,y) {
     this.x = x;
@@ -108,5 +109,5 @@ Player.prototype.reset = function (x,y) {
 }
 
 
-//Help sought from:
+//references:
 //https://www.w3schools.com/graphics/game_controllers.asp
