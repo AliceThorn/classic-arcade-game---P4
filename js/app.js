@@ -23,6 +23,8 @@ Enemy.prototype.update = function(dt) {
       this.x += this.speed * dt
       //checks for collisions everytime update is run
       checkCollisions (allEnemies, player);
+      //checks for reward collisions everytime update is run
+      rewardCollisions (reward, player);
 };
 
 // Draw the enemy on the screen, required method for game
@@ -40,6 +42,7 @@ this.y = y;
 this.width = 50
 this.height = 80
 };
+
 
 // This class requires an update(), render() and
 Player.prototype.update = function(dt) {
@@ -62,13 +65,13 @@ Player.prototype.handleInput = function(allowedKeys) {
     //do not allow player to reach the water
     if (this.y < 50) {this.y - 50; player.reset(200,330)}
     //do not allow player to fall off game board
-    if (this.x < 0 ||this.x > 469 ) {this.y - 50; player.reset(200,330)}
+    if (this.x < 0 ||this.x > 469 ) {this.x - 50; player.reset(200,330)}
 };
 
 // Now instantiate your objects.
-var enemy1 = new Enemy( -100,60,70);
+var enemy1 = new Enemy( -100,60,30);
 var enemy2 = new Enemy( -100, 140,150);
-var enemy3 = new Enemy( -100, 230,30);
+var enemy3 = new Enemy( -100, 230,70);
 
 // Place all enemy objects in an array called allEnemies
 const allEnemies = [ enemy1, enemy2, enemy3 ]
@@ -89,25 +92,122 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
+//defines what happens when enemies and players overlap at 2 points on either entity
+
 //logic taken from explanation at https://stackoverflow.com/questions/23302698/java-check-if-two-rectangles-overlap-at-any-point
-// also explanation of collisions here: https://discussions.udacity.com/t/a-study-in-javascript-frogger-arcade-game-clone/38871/15
+// also explanation of collisions by Karol here: https://discussions.udacity.com/t/a-study-in-javascript-frogger-arcade-game-clone/38871/15
 function checkCollisions (allEnemies, player) { // capitalize the the first letter of Collisions
     for(var i = 0; i < allEnemies.length; i++) {
         if (allEnemies[i].x < player.x + player.width &&
             allEnemies[i].y < player.y + player.height &&
 	          player.x < allEnemies[i].x + allEnemies[i].width &&
 	          player.y < allEnemies[i].height + allEnemies[i].y) {
-          //reset player to original x and y coordinates
-	         player.reset(200,330);
+           //play sound on collision with enemy.
+           crashMusic.play();
+           //Puff of smoke
+           explosion.puff(player.x-100, player.y-50)
+           //reset player to original x and y coordinates
+           //player.reset(200,330);
     	}
     }
 }
+
 
 Player.prototype.reset = function (x,y) {
     this.x = x;
     this.y = y;
 }
 
+
+
+
+var Explosion = function (x,y){
+this.sprite = 'images/pink-smoke-3.png'
+this.x = x;
+this.y = y;
+};
+
+Explosion.prototype.update = function(dt) {
+this.x * dt;
+this.y * dt;
+
+};
+Explosion.prototype.render = function() {
+ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+var explosion = new Explosion(600, 600);
+
+Explosion.prototype.puff = function (x,y) {
+    this.x = x;
+    this.y = y;
+}
+
+var Reward = function (x,y){
+this.sprite = 'images/Key.png'
+this.x = x;
+this.y = y;
+this.width = 50
+this.height = 80
+};
+
+Reward.prototype.update = function(dt) {
+this.x * dt;
+this.y * dt;
+};
+
+Reward.prototype.render = function() {
+ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+};
+
+var reward = new Reward(300,150);
+
+function rewardCollisions (reward, player) { // capitalize the the first letter of Collisions
+    //for(var i = 0; i < allEnemies.length; i++) {
+        if (reward.x < player.x + player.width &&
+            reward.y < player.y + player.height &&
+	          player.x < reward.x + reward.width &&
+	          player.y < reward.height + reward.y) {
+           //play sound on collision with reward
+           powerMusic.play();
+           //reward disappears
+           reward.collect(600, 600)
+    	//}
+    }
+}
+
+Reward.prototype.collect = function (x,y) {
+    this.x = x;
+    this.y = y;
+}
+
+
+
+
+//Royalty Free Sounds - http://soundbible.com/1472-Depth-Charge.html
+const crashMusic = new sound("music/Depth Charge-SoundBible.com-320539466.mp3");
+//Royalty Free Sounds - http://soundbible.com/2067-Blop.html
+const powerMusic = new sound("music/Blop-Mark_DiAngelo-79054334.mp3");
+
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }
+}
+
+function resetGame (){
+  player.reset(200,330);
+  explosion.puff(600, 600);
+}
 
 //references:
 //https://www.w3schools.com/graphics/game_controllers.asp
