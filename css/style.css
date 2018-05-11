@@ -1,3 +1,51 @@
 body {
     text-align: center;
 }
+
+.play {
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    background: #1879BD;
+    color: #FFF;
+    text-decoration: none;
+    position: absolute;
+    left: 80px;
+    top: 5px;
+    text-align: center;
+    font-size: 15px;
+    font-family: sans-serif;
+    border-radius: 15px;
+}
+
+.pause {
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background: red;
+  color: #FFF;
+  text-decoration: none;
+  position: absolute;
+  left: 280px;
+  top: 5px;
+  text-align: center;
+  font-size: 15px;
+  font-family: sans-serif;
+  border-radius: 15px;
+}
+
+.restart {
+  width: 100px;
+  height: 50px;
+  line-height: 50px;
+  background: green;
+  color: #FFF;
+  text-decoration: none;
+  position: absolute;
+  left: 480px;
+  top: 5px;
+  text-align: center;
+  font-size: 15px;
+  font-family: sans-serif;
+  border-radius: 15px;
+}

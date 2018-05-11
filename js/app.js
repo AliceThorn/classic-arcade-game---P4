@@ -1,3 +1,6 @@
+const columnHeight = 83;
+const rowWidth = 101;
+
 // Enemies our player must avoid
 var Enemy = function(x,y,speed) {
     // Variables applied to each of our instances go here,
@@ -9,8 +12,8 @@ var Enemy = function(x,y,speed) {
     this.y = y;
     this.speed = speed;
     //height and width parameter needed to check collisions
-    this.width = 80
-    this.height = 60
+    this.width = rowWidth - 10
+    this.height = columnHeight - 10
 };
 
 
@@ -41,8 +44,8 @@ this.sprite = 'images/char-princess-girl.png'
 this.x = x;
 this.y = y;
 //height and width parameter needed to check collisions
-this.width = 50
-this.height = 80
+this.width = rowWidth - 40
+this.height = columnHeight - 40
 };
 
 
@@ -50,8 +53,8 @@ this.height = 80
 Player.prototype.update = function(dt) {
 this.x * dt;
 this.y * dt;
-
 };
+
 Player.prototype.render = function() {
 ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
@@ -59,16 +62,28 @@ ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 
 //Code similar to as seen at https://www.w3schools.com/graphics/game_controllers.asp
 Player.prototype.handleInput = function(allowedKeys) {
-    if (player.key == 37) {this.x -= 90; }
-    if (player.key == 38) {this.y -= 90; }
-    if (player.key == 39) {this.x += 90; }
-    if (player.key == 40) {this.y += 90; }
+    //clamp function restricts player movement to game board
+    const ymove = columnHeight
+    const xmove = rowWidth ;
 
-    //do not allow player to reach the water
-    if (this.y < 50) {this.y - 50; player.reset(200,330)}
-    //do not allow player to fall off game board
-    if (this.x < 0 ||this.x > 469 ) {this.x - 50; player.reset(200,330)}
-};
+    const ymin = columnHeight;
+    const ymax= columnHeight * 5;
+
+    const xmin = 0;
+    const xmax= rowWidth * 4;
+
+    if (player.key == 38) {this.y = clamp(this.y - ymove, ymin, ymax)}
+    if (player.key == 40) {this.y = clamp(this.y + ymove, ymin, ymax)}
+
+    if (player.key == 37) {this.x = clamp(this.x - xmove, xmin, xmax)}
+    if (player.key == 39) {this.x = clamp(this.x + xmove, xmin, xmax)}
+}
+//Clamp function as seen at https://en.wikipedia.org/wiki/Clamping_(graphics) and
+https://stackoverflow.com/questions/11409895/whats-the-most-elegant-way-to-cap-a-number-to-a-segment
+function clamp(num, min, max) {
+  return num <= min ? min : num >= max ? max : num;
+}
+
 
 
 // Now instantiate your objects.
@@ -79,7 +94,7 @@ var enemy3 = new Enemy( -100, 230,70);
 // Place all enemy objects in an array called allEnemies
 const allEnemies = [ enemy1, enemy2, enemy3 ]
 // Place the player object in a variable called player
-var player = new Player(200,330);
+var player = new Player(columnHeight*2.5,rowWidth*3.25);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -108,7 +123,7 @@ function checkCollisions (allEnemies, player) {
            //play sound on collision with enemy.
            crashMusic.play();
            //Puff of smoke
-           explosion.puff(player.x-100, player.y-50)
+           //explosion.puff(player.x-100, player.y-50)
            //reset player to original x and y coordinates
            player.reset(200,330);
     	}
@@ -122,7 +137,7 @@ Player.prototype.reset = function (x,y) {
 
 function enemyLoop (allEnemies) {
     for(var i = 0; i < allEnemies.length; i++) {
-        if (allEnemies[i].x > 400) {
+        if (allEnemies[i].x > 460) {
            //reset enemy to original x and y coordinates and speed to restart loop
            allEnemies[i].reset(-100, allEnemies[i].y, allEnemies[i].speed);
     	}
@@ -197,6 +212,11 @@ Reward.prototype.collect = function (x,y) {
     this.y = y;
 }
 
+Reward.prototype.reset = function (x,y) {
+    this.x = x;
+    this.y = y;
+}
+
 Explosion.prototype.reset = function (x,y) {
     this.x = x;
     this.y = y;
@@ -226,9 +246,45 @@ function sound(src) {
 
 function resetGame (){
   player.reset(200,330);
+  reward.reset(300, 150);
   explosion.puff(600, 600);
-  //enemy.reset(-100,900);
 }
+
+function gameStart (){
+  player.reset(200,330);
+  reward.reset(300, 150);
+  explosion.puff(600, 600);
+  allEnemies[i].reset(-100, allEnemies[i].y, allEnemies[i].speed);
+}
+
+function gamePause(){
+  player.stop(player.x, player.y);
+  for(var i = 0; i < allEnemies.length; i++) {
+  allEnemies[i].stop(allEnemies[i].x,allEnemies[i].y,0);
+}}
+
+Player.prototype.stop = function (x,y) {
+    this.x = x;
+    this.y = y;
+}
+Enemy.prototype.stop = function (x,y, speed) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+}
+
+
+//http://blog.sklambert.com/html5-game-tutorial-game-ui-canvas-vs-dom/
+document.querySelectorAll('.play')[0].addEventListener('click', function(event) {
+   resetGame();
+});
+document.querySelectorAll('.pause')[0].addEventListener('click', function(event) {
+   gamePause();
+});
+document.querySelectorAll('.restart')[0].addEventListener('click', function(event) {
+   resetGame();
+});
+
 
 //references:
 //https://www.w3schools.com/graphics/game_controllers.asp
