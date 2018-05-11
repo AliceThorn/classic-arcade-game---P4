@@ -25,6 +25,8 @@ Enemy.prototype.update = function(dt) {
       checkCollisions (allEnemies, player);
       //checks for reward collisions everytime update is run
       rewardCollisions (reward, player);
+      //loops the enemy across the screen
+      enemyLoop (allEnemies);
 };
 
 // Draw the enemy on the screen, required method for game
@@ -68,6 +70,7 @@ Player.prototype.handleInput = function(allowedKeys) {
     if (this.x < 0 ||this.x > 469 ) {this.x - 50; player.reset(200,330)}
 };
 
+
 // Now instantiate your objects.
 var enemy1 = new Enemy( -100,60,30);
 var enemy2 = new Enemy( -100, 140,150);
@@ -96,7 +99,7 @@ document.addEventListener('keyup', function(e) {
 
 //logic taken from explanation at https://stackoverflow.com/questions/23302698/java-check-if-two-rectangles-overlap-at-any-point
 // also explanation of collisions by Karol here: https://discussions.udacity.com/t/a-study-in-javascript-frogger-arcade-game-clone/38871/15
-function checkCollisions (allEnemies, player) { // capitalize the the first letter of Collisions
+function checkCollisions (allEnemies, player) {
     for(var i = 0; i < allEnemies.length; i++) {
         if (allEnemies[i].x < player.x + player.width &&
             allEnemies[i].y < player.y + player.height &&
@@ -107,19 +110,30 @@ function checkCollisions (allEnemies, player) { // capitalize the the first lett
            //Puff of smoke
            explosion.puff(player.x-100, player.y-50)
            //reset player to original x and y coordinates
-           //player.reset(200,330);
+           player.reset(200,330);
     	}
     }
 }
-
 
 Player.prototype.reset = function (x,y) {
     this.x = x;
     this.y = y;
 }
 
+function enemyLoop (allEnemies) {
+    for(var i = 0; i < allEnemies.length; i++) {
+        if (allEnemies[i].x > 400) {
+           //reset enemy to original x and y coordinates and speed to restart loop
+           allEnemies[i].reset(-100, allEnemies[i].y, allEnemies[i].speed);
+    	}
+    }
+}
 
-
+Enemy.prototype.reset = function (x,y,speed) {
+    this.x = x;
+    this.y = y;
+    this.speed = speed;
+}
 
 var Explosion = function (x,y){
 this.sprite = 'images/pink-smoke-3.png'
@@ -132,6 +146,7 @@ this.x * dt;
 this.y * dt;
 
 };
+
 Explosion.prototype.render = function() {
 ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
@@ -142,6 +157,7 @@ Explosion.prototype.puff = function (x,y) {
     this.x = x;
     this.y = y;
 }
+
 
 var Reward = function (x,y){
 this.sprite = 'images/Key.png'
@@ -162,7 +178,7 @@ ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 
 var reward = new Reward(300,150);
 
-function rewardCollisions (reward, player) { // capitalize the the first letter of Collisions
+function rewardCollisions (reward, player) {
     //for(var i = 0; i < allEnemies.length; i++) {
         if (reward.x < player.x + player.width &&
             reward.y < player.y + player.height &&
@@ -181,6 +197,10 @@ Reward.prototype.collect = function (x,y) {
     this.y = y;
 }
 
+Explosion.prototype.reset = function (x,y) {
+    this.x = x;
+    this.y = y;
+}
 
 
 
@@ -207,6 +227,7 @@ function sound(src) {
 function resetGame (){
   player.reset(200,330);
   explosion.puff(600, 600);
+  //enemy.reset(-100,900);
 }
 
 //references:
