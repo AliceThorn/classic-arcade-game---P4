@@ -7,8 +7,8 @@ A classis arcade game built to look at Game objects and their implementation usi
 
 ## Getting Started
 
-To access the game go to http://
-Press the start button
+To access the game go to https://alicethorn.github.io/classic-arcade-game---P4/
+Game will start on page load
 
 ### Prerequisites
 
@@ -16,9 +16,11 @@ A keyboard is required, this game cannot be played on a touch screen
 
 ### Installing
 
-Visit http//
+Visit https://alicethorn.github.io/classic-arcade-game---P4/
 Load the Page to start the game
-To win the game you must collect the key reward
+To win the game you must cross enemy tracks to the water
+On reaching the water one will win the game.
+Game is restarted
 
 ## Built With
 
