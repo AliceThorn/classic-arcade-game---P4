@@ -8,15 +8,13 @@ const powerMusic = new sound("music/Blop-Mark_DiAngelo-79054334.mp3");
 
 
 // Enemies our player must avoid
-var Enemy = function(x,y,speed) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+var Enemy = function(x,y,speed,startSpeed) {
+    // Variables applied to each of our instances go here
     this.sprite = 'images/enemy-bug.png';
     this.x = x;
     this.y = y;
     this.speed = speed;
+    this.startSpeed = startSpeed;
     //height and width parameter needed to check collisions
     this.width = rowWidth - 10
     this.height = columnHeight - 10
@@ -42,13 +40,14 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Enemy.prototype.reset = function (x,y,speed) {
+//resets the enemy to starting position snd speed
+Enemy.prototype.reset = function (x,y,speed,startSpeed) {
     this.x = x;
     this.y = y;
-    this.speed = speed;
+    this.speed = this.startSpeed
 }
 
-// Now write your own player class
+//player class
 var Player = function (x,y){
   this.sprite = 'images/char-princess-girl.png';
   this.x = x;
@@ -58,24 +57,25 @@ var Player = function (x,y){
   this.height = columnHeight - 40;
 };
 
-// This class requires an update(), render() and
+// player class update() function
 Player.prototype.update = function(dt) {
   this.x * dt;
   this.y * dt;
 };
 
+// player class render() function
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
-// a handleInput() method.
 
-//Code similar to as seen at https://www.w3schools.com/graphics/game_controllers.asp
+// player class handleInput() method.
+//Similar to as seen at https://www.w3schools.com/graphics/game_controllers.asp
 Player.prototype.handleInput = function(allowedKeys) {
     //clamp function restricts player movement to game board
     const ymove = columnHeight;
     const xmove = rowWidth ;
 
-    const ymin = columnHeight;
+    const ymin = 0;
     const ymax= columnHeight * 5;
 
     const xmin = 0;
@@ -86,13 +86,17 @@ Player.prototype.handleInput = function(allowedKeys) {
 
     if (player.key == 37) {this.x = clamp(this.x - xmove, xmin, xmax)}
     if (player.key == 39) {this.x = clamp(this.x + xmove, xmin, xmax)}
+
+    if (player.y < 70){showModal()}
 }
 
+//resets the player to starting position
 Player.prototype.reset = function (x,y) {
     this.x = x;
     this.y = y;
 };
 
+//created a reward class for the key to be collected by player
 var Reward = function (x,y){
   this.sprite = 'images/Key.png';
   this.x = x;
@@ -101,20 +105,24 @@ var Reward = function (x,y){
   this.height = 80
 };
 
+//reward update() function
 Reward.prototype.update = function(dt) {
   this.x * dt;
   this.y * dt;
 };
 
+//reward render() function
 Reward.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+//reward collect() function
 Reward.prototype.collect = function (x,y) {
     this.x = x;
     this.y = y;
 };
 
+//resets reward to starting position
 Reward.prototype.reset = function (x,y) {
     this.x = x;
     this.y = y;
@@ -144,6 +152,7 @@ function checkCollisions (allEnemies, player) {
     }
 }
 
+//loops all the enemies so that game is continuous
 function enemyLoop (allEnemies) {
     for(var i = 0; i < allEnemies.length; i++) {
         if (allEnemies[i].x > 460) {
@@ -153,7 +162,7 @@ function enemyLoop (allEnemies) {
     }
 }
 
-
+//defines what happens when player collects key
 function rewardCollisions (reward, player) {
     //for(var j = 0; j < allRewards.length; j++) {
         if (reward.x < player.x + player.width &&
@@ -164,13 +173,11 @@ function rewardCollisions (reward, player) {
            powerMusic.play();
            //reward disappears
            reward.collect(600, 600);
-           showModal()
     	//}
     }
 }
 
-
-
+//sound functions for collisions
 function sound(src) {
     this.sound = document.createElement("audio");
     this.sound.src = src;
@@ -186,35 +193,36 @@ function sound(src) {
     }
 }
 
+//puts enemy, player and reward all back to starting positions
 function resetGame (){
   player.reset(200,330);
   reward.reset(300, 70);
   for(var i = 0; i < allEnemies.length; i++) {
          //reset enemy to original x and y coordinates and speed to restart loop
-         allEnemies[i].reset(-100, allEnemies[i].y, allEnemies[i].speed);
+         allEnemies[i].reset(-100, allEnemies[i].y, allEnemies[i].speed, allEnemies[i].startSpeed);
     }
 }
 
+//stops the game from continuing
 function stopGame (){
   player.reset(player.x,player.y);
   reward.reset(reward.x, reward.y);
   for(var i = 0; i < allEnemies.length; i++) {
          //reset enemy to original x and y coordinates and speed to restart loop
-         allEnemies[i].reset( allEnemies[i].x, allEnemies[i].y, allEnemies[i].speed);
+         allEnemies[i].reset(-100, allEnemies[i].y, 0, allEnemies[i].startSpeed);
     }
 }
 
-
 // Now instantiate your objects.
-var enemy1 = new Enemy( -100, 60, 30);
-var enemy2 = new Enemy( -100, 140, 150);
-var enemy3 = new Enemy( -100, 230, 70);
+var enemy1 = new Enemy( -100, 60, 30, 30);
+var enemy2 = new Enemy( -100, 140, 150, 150);
+var enemy3 = new Enemy( -100, 230, 70, 70);
 
 // Place all enemy objects in an array called allEnemies
 const allEnemies = [ enemy1, enemy2, enemy3 ];
 
 // Place the player object in a variable called player
-var player = new Player(columnHeight*2.5,rowWidth*3.25);
+var player = new Player(columnHeight*2.5, rowWidth*3.25);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -230,6 +238,7 @@ document.addEventListener('keyup', function(e) {
     player.handleInput(allowedKeys[e.keyCode]);
 });
 
+//instantiates rewardCollisions
 var reward = new Reward(300,70);
 
 // Modal HTML by https://www.w3schools.com/howto/howto_css_modals.asp
@@ -256,6 +265,7 @@ modalButton.onclick = function() {
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
     modal.style.display = "none";
+    resetGame();
 }
 
 // When the user clicks anywhere outside of the modal, close it
@@ -265,7 +275,9 @@ window.onclick = function(event) {
     }
 }
 
-
-
-//references:
-//https://www.w3schools.com/graphics/game_controllers.asp
+//restart button created
+var restartButton = document.getElementById("butn");
+//events and function of the restart button
+restartButton.onclick = function() {
+    resetGame();
+}
