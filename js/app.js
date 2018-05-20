@@ -248,7 +248,7 @@ var modal = document.getElementById("arcadeModal");
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0];
 
-// Get the button that closes the modal and rests the game
+// Get the button that closes the modal and resets the game
 var modalButton = document.getElementById("btn");
 
 function showModal() {
