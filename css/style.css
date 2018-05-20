@@ -2,50 +2,51 @@ body {
     text-align: center;
 }
 
-.play {
-    width: 100px;
-    height: 50px;
-    line-height: 50px;
-    background: #1879BD;
-    color: #FFF;
+/* Modal CSS by https://www.w3schools.com/howto/howto_css_modals.asp */
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
     text-decoration: none;
-    position: absolute;
-    left: 80px;
-    top: 5px;
+    cursor: pointer;
+}
+/*Button as seen at https://www.w3schools.com/tags/tag_button.asp*/
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 25px;
     text-align: center;
-    font-size: 15px;
-    font-family: sans-serif;
-    border-radius: 15px;
-}
-
-.pause {
-  width: 100px;
-  height: 50px;
-  line-height: 50px;
-  background: red;
-  color: #FFF;
-  text-decoration: none;
-  position: absolute;
-  left: 280px;
-  top: 5px;
-  text-align: center;
-  font-size: 15px;
-  font-family: sans-serif;
-  border-radius: 15px;
-}
-
-.restart {
-  width: 100px;
-  height: 50px;
-  line-height: 50px;
-  background: green;
-  color: #FFF;
-  text-decoration: none;
-  position: absolute;
-  left: 480px;
-  top: 5px;
-  text-align: center;
-  font-size: 15px;
-  font-family: sans-serif;
-  border-radius: 15px;
+    font-size: 16px;
+    cursor: pointer;
 }

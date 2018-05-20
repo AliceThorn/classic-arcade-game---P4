@@ -95,7 +95,6 @@ var Engine = (function(global) {
         });
         player.update();
         reward.update();
-        explosion.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -157,7 +156,6 @@ var Engine = (function(global) {
 
         player.render();
         reward.render();
-        explosion.render();
     }
 
     /* This function does nothing but it could have been a good place to
