@@ -1,6 +1,50 @@
 frontend-nanodegree-arcade-game
 ===============================
 
-Students should use this [rubric](https://review.udacity.com/#!/projects/2696458597/rubric) for self-checking their submission. Make sure the functions you write are **object-oriented** - either class functions (like Player and Enemy) or class prototype functions such as Enemy.prototype.checkCollisions, and that the keyword 'this' is used appropriately within your class and class prototype functions to refer to the object the function is called upon. Also be sure that the **readme.md** file is updated with your instructions on both how to 1. Run and 2. Play your arcade game.
+# Project Title
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+A classis arcade game built to look at Game objects and their implementation using JavaScript object-oriented programming features.
+
+## Getting Started
+
+To access the game go to http://
+Press the start button
+
+### Prerequisites
+
+A keyboard is required, this game cannot be played on a touch screen
+
+### Installing
+
+Visit http//
+Load the Page to start the game
+To win the game you must collect the key reward
+
+## Built With
+
+* Atom
+* Github
+
+## Versioning
+
+We use  Github for versioning https://github.com/AliceThorn/classic-arcade-game---P4
+
+## Authors
+
+* **Alicia Thornthwaite**
+Original Work - https://classroom.udacity.com/nanodegrees/nd001/parts/4942f4d7-a48d-4794-9eb0-404b3ed3cfe1/modules/269645859775463/lessons/2696458597239847/project
+
+https://review.udacity.com/?_ga=1.242571394.1230547285.1451946706#!/rubrics/15/view
+
+## License
+
+This project is licensed under the MIT License
+
+## Acknowledgments
+
+* Udacity
+* FEND Programme
+* Sound Bible http://soundbible.com/
+* W3 Schools - Game Controller https://www.w3schools.com
+* Stack Overflow - Clamp Function https://stackoverflow.com/questions/11409895/whats-the-most-elegant-way-to-cap-a-number-to-a-segment
+* Udacity Forums - Karol - https://discussions.udacity.com/t/a-study-in-javascript-frogger-arcade-game-clone/38871/15
